@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "photoURL": { "type": "string" },
+        "preferences": { "type": "object" },
+        "role": { "type": "string", "enum": ["user", "admin"] }
+      },
+      "required": ["uid", "email"]
+    },
+    "Destination": {
+      "title": "Destination",
+      "description": "Travel destination information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "averageRating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "tags": { "type": "array" }
+      },
+      "required": ["name", "description"]
+    },
+    "TravelPackage": {
+      "title": "Travel Package",
+      "description": "A travel package created by a user or the agency",
+      "type": "object",
+      "properties": {
+        "creatorId": { "type": "string" },
+        "destinationId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "itinerary": { "type": "array" },
+        "images": { "type": "array" },
+        "averageRating": { "type": "number" },
+        "reviewCount": { "type": "number" }
+      },
+      "required": ["creatorId", "title", "price"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "A travel booking record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "packageId": { "type": "string" },
+        "bookingDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "cancelled"] },
+        "totalPrice": { "type": "number" }
+      },
+      "required": ["userId", "packageId", "status"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "User review and rating for a destination or package",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "targetId": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["destination", "package"] },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "targetId", "rating"]
+    },
+    "ViewLog": {
+      "title": "View Log",
+      "description": "Record of a user viewing a destination or package",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "targetId": { "type": "string" },
+        "targetType": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "targetId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/destinations/{destinationId}": {
+      "schema": "Destination",
+      "description": "Available travel destinations"
+    },
+    "/packages/{packageId}": {
+      "schema": "TravelPackage",
+      "description": "Travel packages for sale"
+    },
+    "/bookings/{bookingId}": {
+      "schema": "Booking",
+      "description": "User bookings"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "User reviews and ratings"
+    },
+    "/viewLogs/{logId}": {
+      "schema": "ViewLog",
+      "description": "User activity logs for recommendations"
+    }
+  }
+}
